@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stripe Payment Example</title>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <h1>Make a Payment</h1>
+  <form action="/charge" method="post">
+    <script
+      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+      data-key="pk_test_51O9AgVCPosaU36ulAs9LPDxJGMwoomDyO3Hb4gy9NH8hzHuwUmGAHldpZDrZDxlBRf8Z19CTdmzpYb9OmBPqNRtI00kVo1Rx78"  
+      data-amount="2500"
+      data-name="Sample Store"
+      data-description="Sample Payment"
+      data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+      data-locale="auto"
+      data-currency="usd"
+    ></script>
+  </form>
+</body>
+</html>
