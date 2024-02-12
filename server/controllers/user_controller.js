@@ -2,8 +2,6 @@ const db = require("../Models/config/db");
 
 const jwt = require("jsonwebtoken");
 
-require('dotenv').config();
-
 const bcrypt = require('bcrypt');
 
 const Joi = require('joi');

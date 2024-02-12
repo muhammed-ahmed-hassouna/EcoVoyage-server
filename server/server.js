@@ -4,6 +4,8 @@ app.use(express.json());
 var cors = require('cors');
 app.use(cors());
 
+require("dotenv").config();
+
 const userRouter = require("./routes/user_routes");
 
 const destinations_routes = require('./routes/destinations_routes');

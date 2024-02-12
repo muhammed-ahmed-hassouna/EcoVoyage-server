@@ -1,4 +1,3 @@
-require("dotenv").config();
 const db = require('../Models/config/knexConfig');
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 

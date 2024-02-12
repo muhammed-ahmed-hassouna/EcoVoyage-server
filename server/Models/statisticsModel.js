@@ -7,6 +7,7 @@ const getBookingCount = async () => {
         console.error('Error fetching booking count:', error);
     }
 }
+
 const getCommentCount = async () => {
     try {
         return await db('comments').count('* as count');
