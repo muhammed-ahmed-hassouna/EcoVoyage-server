@@ -77,6 +77,17 @@ const markTicketAsDeleted = async (req, res) => {
   }
 };
 
+const CancelTicket = async (req, res) => {
+  const ticket_id = req.params.id;
+  try {
+      const result = await ticketBookingModel.CancelTicket(ticket_id);
+      res.json(result);
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  }
+};
+
 // const getDestinationsPaginated = async (req, res) => {
 //     try {
 //         const page = parseInt(req.query.page) || 1;
@@ -109,4 +120,6 @@ module.exports = {
   markTicketAsDeleted,
 
   getTicketByID,
+
+  CancelTicket,
 };

@@ -6,5 +6,7 @@ router.get('/getBookingCount', statisticsController.getBookingCount);
 
 router.get('/getCommentCount', statisticsController.getCommentCount);
 
+router.get("/getUserData", statisticsController.getUserData);
+
 
 module.exports = router;

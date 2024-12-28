@@ -1,4 +1,4 @@
-const db = require("../../Models/config/knexConfig");
+const db = require("../../Models/config/db");
 
 const statisticsModel = require("../../Models/statistics/statistics_model");
 //const getBookingQuery = `SELECT COUNT(*) FROM booking`;
@@ -23,8 +23,21 @@ const getCommentCount = async (req, res) => {
   }
 };
 
+const getUserData = async (req, res) => {
+  try {
+    const result = await db.query(
+      "SELECT * FROM users WHERE is_deleted = false"
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+};
 module.exports = {
   getBookingCount,
 
   getCommentCount,
+
+  getUserData,
 };

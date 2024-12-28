@@ -14,6 +14,8 @@ router.post(
   TicketController.addTicket
 );
 
+router.put("/CancelTicket/:id", TicketController.CancelTicket);
+
 router.put(
   "/updateTicket/:id",
   verifyJWT.authorize([1, 2]),

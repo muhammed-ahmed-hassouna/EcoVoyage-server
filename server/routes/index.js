@@ -10,6 +10,7 @@ const ticketbooking = require("./ticketbooking/ticketbooking_routes");
 const stripeRouter = require("./stripe/stripe_routes");
 const roomsRouter = require("./rooms/rooms_routes");
 const emailRouter = require("./email/email_routes");
+const profileRouter = require("./profile/profile_routes");
 
 module.exports = (app) => {
   app.use(userRouter);
@@ -24,4 +25,5 @@ module.exports = (app) => {
   app.use(stripeRouter);
   app.use(roomsRouter);
   app.use(emailRouter);
+  app.use(profileRouter);
 };

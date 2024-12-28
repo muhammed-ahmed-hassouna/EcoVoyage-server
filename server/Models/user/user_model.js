@@ -1,4 +1,3 @@
-const db = require("../../Models/config/db");
 const knex = require("../../Models/config/knexConfig");
 
 const bcrypt = require("bcrypt");
@@ -22,7 +21,6 @@ const emailExists = async (email) => {
   return result.length > 0;
 };
 
-// Validation function
 const validateUserInput = ({
   first_name,
   last_name,
@@ -59,7 +57,7 @@ const validateUserInput = ({
   return error ? { error: error.details } : {};
 };
 
-// Model function
+
 const registerUser = async ({
   first_name,
   last_name,
@@ -173,87 +171,7 @@ const loginUser = async ({ email, password }) => {
     }
   } catch (err) {
     console.error(err);
-    throw err; // Propagate the error to be handled in the controller
-  }
-};
-
-const getUserByIdQuery = `
-    SELECT * FROM users 
-    WHERE 
-        is_deleted = false
-        AND user_id = $1`;
-
-const deleteUserQuery = `
-    UPDATE users 
-    SET 
-        is_deleted = true 
-    WHERE 
-        user_id = $1`;
-
-const updateUser = async (user_id, userData) => {
-  try {
-    const result = await knex("users")
-      .where("user_id", user_id)
-      .update(userData)
-      .returning("*");
-
-    return result[0];
-  } catch (error) {
-    throw error;
-  }
-};
-
-const getBookingOfUser = async (user_id) => {
-  try {
-    const result = await knex("booking")
-      .where("user_id", user_id)
-      .where("is_shown", true)
-      .select(
-        "book_id",
-        "phone",
-        "cost",
-        "adults",
-        "children",
-        "user_id",
-        "activities_id",
-        "packages_id"
-      );
-    return result;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const getFlightsOfUser = async (user_id) => {
-  try {
-    const result = await knex("ticketbooking")
-      .where("ticketbooking.user_id", user_id)
-      .where("ticketbooking.is_shown", true)
-      .select(
-        "ticketbooking.ticket_id",
-        "ticketbooking.ticket_type",
-        "ticketbooking.cost",
-        "ticketbooking.user_id",
-        "ticketbooking.flights_id",
-        "flights.depart_date",
-        "flights.return_date"
-      )
-      .join("flights", "ticketbooking.flights_id", "flights.flights_id");
-
-    return result;
-  } catch (error) {
-    throw error;
-  }
-};
-const CancelTicket = async (ticket_id) => {
-  try {
-    return await knex("ticketbooking")
-      .where({ ticket_id: ticket_id })
-      .update({ is_shown: false })
-      .returning("*");
-  } catch (err) {
-    console.error(err);
-    throw new Error("Error Cancel Ticket");
+    throw err;
   }
 };
 
@@ -299,61 +217,10 @@ const getUserPaginated = async (page, pageSize, search) => {
   }
 };
 
-const getUserByEmails = async (email) => {
-  const userQuery = "SELECT * FROM users WHERE email = $1";
-  const user = await db.query(userQuery, [email]);
-  return user.rows[0];
-};
-
-const createUsers = async ({ first_name, last_name, email, picture }) => {
-  const role_id = 1;
-  // const created_at = new Date();
-  const password = "No Access";
-  // const phone = "00000000";
-  const country = "No Access";
-  const query = `
-    INSERT INTO users (first_name,last_name, email, password, country, role_id, profileimage) VALUES ($1, $2, $3, $4, $5, $6, $7)
-    RETURNING *`;
-
-  const values = [
-    first_name,
-
-    last_name,
-
-    email,
-
-    password,
-
-    country,
-    // phone,
-    role_id,
-    // created_at,
-    picture,
-  ];
-  const user = await db.query(query, values);
-  return user.rows[0];
-};
-
 module.exports = {
   registerUser,
 
   loginUser,
 
-  getUserByIdQuery,
-
-  updateUser,
-
-  deleteUserQuery,
-
-  getBookingOfUser,
-
-  getFlightsOfUser,
-
-  CancelTicket,
-
   getUserPaginated,
-
-  getUserByEmails,
-
-  createUsers,
 };

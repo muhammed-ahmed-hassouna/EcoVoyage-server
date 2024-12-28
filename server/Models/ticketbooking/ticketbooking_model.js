@@ -164,6 +164,18 @@ const markTicketAsDeleted = async (ticket_id) => {
   }
 };
 
+const CancelTicket = async (ticket_id) => {
+  try {
+    return await db("ticketbooking")
+      .where({ ticket_id: ticket_id })
+      .update({ is_shown: false })
+      .returning("*");
+  } catch (err) {
+    console.error(err);
+    throw new Error("Error Cancel Ticket");
+  }
+};
+
 // const getDestinationsPaginated = async (page, pageSize) => {
 //     try {
 //         const offset = (page - 1) * pageSize;
@@ -189,5 +201,7 @@ module.exports = {
 
   markTicketAsDeleted,
 
-  // getDestinationsPaginated
+  // getDestinationsPaginated,
+
+  CancelTicket,
 };
