@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const statisticsController = require('../controllers/statistics-controller');
+const statisticsController = require('../../controllers/statistics/statistics_controller');
 const router = Router();
 
 router.get('/getBookingCount', statisticsController.getBookingCount);
