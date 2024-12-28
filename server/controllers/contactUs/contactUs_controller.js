@@ -4,7 +4,7 @@ app.use(express.json());
 const nodemailer = require("nodemailer");
 var cors = require("cors");
 app.use(cors());
-const db = require("../Models/config/db");
+const db = require("../../Models/config/db");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -67,12 +67,10 @@ const sendEmailContact = async (req, res) => {
     await transporter.sendMail(thankYouMailOptions);
 
     // Send success response
-    res
-      .status(200)
-      .json({
-        message:
-          "Email has been sent and contact details saved. Thank you email sent.",
-      });
+    res.status(200).json({
+      message:
+        "Email has been sent and contact details saved. Thank you email sent.",
+    });
   } catch (error) {
     console.error("Error sending email or saving contact:", error);
     res
@@ -83,7 +81,6 @@ const sendEmailContact = async (req, res) => {
 
 const getContact = async (req, res) => {
   try {
-    
     const result = await db.query(
       "SELECT * FROM contact_us WHERE is_shown = true"
     );

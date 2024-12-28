@@ -1,4 +1,4 @@
-const db = require('../Models/config/knexConfig');
+const db = require("../../Models/config/knexConfig");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const payment = async (req, res) => {
@@ -27,5 +27,5 @@ const payment = async (req, res) => {
 };
 
 module.exports = {
-  payment
-}
+  payment,
+};
