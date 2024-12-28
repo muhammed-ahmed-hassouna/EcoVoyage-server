@@ -1,5 +1,5 @@
 // const db = require('./config/db');
-const db = require('./config/knexConfig');
+const db = require('./../config/knexConfig');
 
 const Joi = require('joi');
 
