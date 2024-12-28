@@ -29,8 +29,6 @@ router.post("/Signup", userController.registerUser);
 
 router.post("/Login", userController.loginUser);
 
-router.put("/updatepassword", userController.updatepassword);
-
 router.get("/getUserId", verifyJWT.authorize([1, 2]), userController.getUserId);
 
 router.put(

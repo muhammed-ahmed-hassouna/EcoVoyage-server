@@ -1,4 +1,7 @@
+const db = require("../../Models/config/db");
 const nodemailer = require("nodemailer");
+
+const { bcrypt, Joi } = require('../../utils/dependencies');
 
 var transporter = nodemailer.createTransport({
   service: "gmail",
@@ -75,7 +78,52 @@ const verificationCode = async (req, res) => {
   }
 };
 
+const updatePassword = async (req, res) => {
+  const newPassword = req.body.newPassword;
+  const confirm_password = req.body.confirm_password;
+
+  if (!isVerificationComplete) {
+    return res.status(400).json({
+      error:
+        "Verification not complete. Please enter the verification code first.",
+    });
+  }
+
+  const email = emailFromSendEmail;
+  const updateQuery = "UPDATE users SET password = $1 WHERE email = $2";
+
+  try {
+    const schema = Joi.object({
+      newPassword: Joi.string()
+        .pattern(
+          new RegExp(
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&!])[A-Za-z\\d@#$%^&!]{6,30}$"
+          )
+        )
+        .required(),
+      confirm_password: Joi.any().valid(Joi.ref("newPassword")).required(),
+    });
+
+    const validate = schema.validate({ newPassword, confirm_password });
+    if (validate.error) {
+      res.status(400).json({ error: validate.error.details });
+    } else {
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      await db.query(updateQuery, [hashedPassword, email]);
+      res.status(200).json({
+        message: "Password updated successfully!",
+      });
+    }
+  } catch (err) {
+    console.error("Error updating password:", err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the password" });
+  }
+};
+
 module.exports = {
   sendEmail,
   verificationCode,
+  updatePassword,
 };

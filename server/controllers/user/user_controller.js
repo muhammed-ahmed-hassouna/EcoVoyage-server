@@ -1,29 +1,10 @@
 const db = require("../../Models/config/db");
-// const db = require("../../Models/config/db");
-
-const jwt = require("jsonwebtoken");
-
-const bcrypt = require("bcrypt");
-
-const Joi = require("joi");
 
 const userModel = require("../../Models/user/user_model");
 
 const Firebase = require("../../Middleware/FirebaseConfig/FireBaseConfig");
 
-const express = require("express");
-
-const app = express();
-
-app.use(express.json());
-
-var cors = require("cors");
-
-app.use(cors());
-
-const cookieParser = require("cookie-parser");
-
-app.use(cookieParser());
+const { jwt, bcrypt, Joi } = require('../../utils/dependencies');
 
 const registerUser = async (req, res) => {
   const { first_name, last_name, email, password, confirm_password, country } =
@@ -89,49 +70,6 @@ const loginUser = async (req, res) => {
   }
 };
 
-const updatepassword = async (req, res) => {
-  const newPassword = req.body.newPassword;
-  const confirm_password = req.body.confirm_password;
-
-  if (!isVerificationComplete) {
-    return res.status(400).json({
-      error:
-        "Verification not complete. Please enter the verification code first.",
-    });
-  }
-
-  const email = emailFromSendEmail;
-  const updateQuery = "UPDATE users SET password = $1 WHERE email = $2";
-
-  try {
-    const schema = Joi.object({
-      newPassword: Joi.string()
-        .pattern(
-          new RegExp(
-            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&!])[A-Za-z\\d@#$%^&!]{6,30}$"
-          )
-        )
-        .required(),
-      confirm_password: Joi.any().valid(Joi.ref("newPassword")).required(),
-    });
-
-    const validate = schema.validate({ newPassword, confirm_password });
-    if (validate.error) {
-      res.status(400).json({ error: validate.error.details });
-    } else {
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      await db.query(updateQuery, [hashedPassword, email]);
-      res.status(200).json({
-        message: "Password updated successfully!",
-      });
-    }
-  } catch (err) {
-    console.error("Error updating password:", err);
-    res
-      .status(500)
-      .json({ error: "An error occurred while updating the password" });
-  }
-};
 // setInterval(() => {
 //     emailSent = false; // Reset emailSent flag every 60 seconds
 // }, 60000);
@@ -435,8 +373,6 @@ module.exports = {
   registerUser,
 
   loginUser,
-
-  updatepassword,
 
   getUserData,
 

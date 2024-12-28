@@ -6,4 +6,6 @@ router.post("/sendEmail", emailController.sendEmail);
 
 router.post("/verificationCode", emailController.verificationCode);
 
+router.put("/updatePassword", emailController.updatePassword);
+
 module.exports = router;
